@@ -1,27 +1,60 @@
 <template>
   <div class="dashboard">
     <h2>全国疫情数据</h2>
-    <p class="subtitle">截至 2020-01-31 21:25</p>
+    <p class="subtitle" v-if="dash.modifyTime">
+      截至 {{ dash.modifyTime | formatDate }}
+    </p>
     <ul class="list">
       <li>
-        <strong class="confirmed">9811</strong>
+        <strong class="confirmed">{{ dash.confirmedCount }}</strong>
         <div>确诊</div>
       </li>
       <li>
-        <strong class="suspect">15238</strong>
+        <strong class="suspect">{{ dash.suspectedCount }}</strong>
         <div>疑似</div>
       </li>
       <li>
-        <strong class="dead">213</strong>
+        <strong class="dead">{{ dash.deadCount }}</strong>
         <div>死亡</div>
       </li>
       <li>
-        <strong class="cured">211</strong>
+        <strong class="cured">{{ dash.curedCount }}</strong>
         <div>治愈</div>
       </li>
     </ul>
   </div>
 </template>
+
+<script>
+import Dash from '../models/dash'
+
+export default {
+  data() {
+    return {
+      dash: {}
+    }
+  },
+  mounted() {
+    this.getDash()
+  },
+  methods: {
+    async getDash() {
+      const res = await Dash.getDash()
+      this.dash = res
+    }
+  },
+  filters: {
+    formatDate: function(value) {
+      const date = new Date(value + 8 * 3600 * 1000)
+      return date
+        .toJSON()
+        .substr(0, 19)
+        .replace('T', ' ')
+        .replace(/-/g, '.')
+    }
+  }
+}
+</script>
 
 <style lang="less" scoped>
 .dashboard {

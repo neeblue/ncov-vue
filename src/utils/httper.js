@@ -3,7 +3,7 @@ import baseUrl from '../config/setting'
 
 class Httper {
   static instance
-  static http = Httper.initHttp()
+  static http
 
   constructor() {
     if (!this.http) {
@@ -27,7 +27,7 @@ class Httper {
       const resp = await this.http.get(url, params)
       return resp.data
     } catch (err) {
-      console.log(err)
+      // console.log(err)
     }
   }
 }
